@@ -54,15 +54,15 @@ def main(args):
             paths, actual_issame = lfw.get_paths(os.path.expanduser(args.lfw_dir), pairs)
             
             image_paths_placeholder = tf.placeholder(tf.string, shape=(None,1), name='image_paths')
-            labels_placeholder = tf.placeholder(tf.int32, shape=(None,1), name='labels')
+            labels_placeholder = tf.placeholder(tf.int64, shape=(None,1), name='labels')
             batch_size_placeholder = tf.placeholder(tf.int32, name='batch_size')
-            control_placeholder = tf.placeholder(tf.int32, shape=(None,1), name='control')
+            control_placeholder = tf.placeholder(tf.int64, shape=(None,1), name='control')
             phase_train_placeholder = tf.placeholder(tf.bool, name='phase_train')
  
             nrof_preprocess_threads = 4
             image_size = (args.image_size, args.image_size)
             eval_input_queue = data_flow_ops.FIFOQueue(capacity=2000000,
-                                        dtypes=[tf.string, tf.int32, tf.int32],
+                                        dtypes=[tf.string, tf.int64, tf.int64],
                                         shapes=[(1,), (1,), (1,)],
                                         shared_name=None, name=None)
             eval_enqueue_op = eval_input_queue.enqueue_many([image_paths_placeholder, labels_placeholder, control_placeholder], name='eval_enqueue_op')
